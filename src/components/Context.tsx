@@ -45,7 +45,7 @@ const ContextComponent: React.FC = () => {
       <CountComponent />
       <CountResetComponent />
       <CountUpComponent />
-      <Button onClick={() => navigate('/use-state')}>go /react/use-state</Button>
+      <Button onClick={() => navigate('/use-state')}>go /use-state</Button>
     </Box>
   );
 };
