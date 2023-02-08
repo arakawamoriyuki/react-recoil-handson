@@ -14,6 +14,7 @@ import Context from './components/Context';
 import ContextOptimize from './components/ContextOptimize';
 import Recoil from './components/Recoil';
 import RecoilOptimize from './components/RecoilOptimize';
+import RecoilCustomHook from './components/RecoilCustomHook';
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -47,6 +48,7 @@ const App: FC = () => (
         <Route path="/context-optimize" element={<ContextOptimize />} />
         <Route path="/recoil" element={<Recoil />} />
         <Route path="/recoil-optimize" element={<RecoilOptimize />} />
+        <Route path="/recoil-custom-hook" element={<RecoilCustomHook />} />
       </Routes>
     </BrowserRouter>
   </Providers>
