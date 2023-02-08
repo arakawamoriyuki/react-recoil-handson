@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { CountProvider } from './Context';
 import UseState from './components/UseState';
 import UseReducer from './components/UseReducer';
 import UseEffect from './components/UseEffect';
@@ -7,20 +8,36 @@ import Memo from './components/Memo';
 import UseMemo from './components/UseMemo';
 import UseCallback from './components/UseCallback';
 import CustomHook from './components/CustomHook';
+import Context from './components/Context';
+
+interface ProvidersProps {
+  children: React.ReactNode;
+}
+
+export const Providers: React.FC<ProvidersProps> = ({ children }) => {
+  return (
+    <CountProvider>
+      {children}
+    </CountProvider>
+  );
+};
 
 const App: FC = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<UseState />} />
-      <Route path="/use-state" element={<UseState />} />
-      <Route path="/use-reducer" element={<UseReducer />} />
-      <Route path="/use-effect" element={<UseEffect />} />
-      <Route path="/memo" element={<Memo />} />
-      <Route path="/use-memo" element={<UseMemo />} />
-      <Route path="/use-callback" element={<UseCallback />} />
-      <Route path="/custom-hook" element={<CustomHook />} />
-    </Routes>
-  </BrowserRouter>
+  <Providers>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<UseState />} />
+        <Route path="/use-state" element={<UseState />} />
+        <Route path="/use-reducer" element={<UseReducer />} />
+        <Route path="/use-effect" element={<UseEffect />} />
+        <Route path="/memo" element={<Memo />} />
+        <Route path="/use-memo" element={<UseMemo />} />
+        <Route path="/use-callback" element={<UseCallback />} />
+        <Route path="/custom-hook" element={<CustomHook />} />
+        <Route path="/context" element={<Context />} />
+      </Routes>
+    </BrowserRouter>
+  </Providers>
 );
 
 export default App;
