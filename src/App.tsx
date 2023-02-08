@@ -6,6 +6,7 @@ import UseEffect from './components/UseEffect';
 import Memo from './components/Memo';
 import UseMemo from './components/UseMemo';
 import UseCallback from './components/UseCallback';
+import CustomHook from './components/CustomHook';
 
 const App: FC = () => (
   <BrowserRouter>
@@ -17,6 +18,7 @@ const App: FC = () => (
       <Route path="/memo" element={<Memo />} />
       <Route path="/use-memo" element={<UseMemo />} />
       <Route path="/use-callback" element={<UseCallback />} />
+      <Route path="/custom-hook" element={<CustomHook />} />
     </Routes>
   </BrowserRouter>
 );
