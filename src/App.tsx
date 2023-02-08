@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 import { CountProvider } from './Context';
 import { CountOptimizeProvider } from './ContextOptimize';
 import UseState from './components/UseState';
@@ -11,6 +12,7 @@ import UseCallback from './components/UseCallback';
 import CustomHook from './components/CustomHook';
 import Context from './components/Context';
 import ContextOptimize from './components/ContextOptimize';
+import Recoil from './components/Recoil';
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -20,7 +22,9 @@ export const Providers: React.FC<ProvidersProps> = ({ children }) => {
   return (
     <CountProvider>
       <CountOptimizeProvider>
-        {children}
+        <RecoilRoot>
+          {children}
+        </RecoilRoot>
       </CountOptimizeProvider>
     </CountProvider>
   );
@@ -40,6 +44,7 @@ const App: FC = () => (
         <Route path="/custom-hook" element={<CustomHook />} />
         <Route path="/context" element={<Context />} />
         <Route path="/context-optimize" element={<ContextOptimize />} />
+        <Route path="/recoil" element={<Recoil />} />
       </Routes>
     </BrowserRouter>
   </Providers>
