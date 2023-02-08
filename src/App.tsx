@@ -4,6 +4,7 @@ import UseState from './components/UseState';
 import UseReducer from './components/UseReducer';
 import UseEffect from './components/UseEffect';
 import Memo from './components/Memo';
+import UseMemo from './components/UseMemo';
 
 const App: FC = () => (
   <BrowserRouter>
@@ -13,6 +14,7 @@ const App: FC = () => (
       <Route path="/use-reducer" element={<UseReducer />} />
       <Route path="/use-effect" element={<UseEffect />} />
       <Route path="/memo" element={<Memo />} />
+      <Route path="/use-memo" element={<UseMemo />} />
     </Routes>
   </BrowserRouter>
 );
