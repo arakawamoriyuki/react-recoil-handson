@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import UseState from './components/UseState';
 
 const App: FC = () => (
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<div>test</div>} />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="/" element={<UseState />} />
+      <Route path="/use-state" element={<UseState />} />
     </Routes>
   </BrowserRouter>
 );
