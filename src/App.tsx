@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CountProvider } from './Context';
+import { CountOptimizeProvider } from './ContextOptimize';
 import UseState from './components/UseState';
 import UseReducer from './components/UseReducer';
 import UseEffect from './components/UseEffect';
@@ -9,6 +10,7 @@ import UseMemo from './components/UseMemo';
 import UseCallback from './components/UseCallback';
 import CustomHook from './components/CustomHook';
 import Context from './components/Context';
+import ContextOptimize from './components/ContextOptimize';
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -17,7 +19,9 @@ interface ProvidersProps {
 export const Providers: React.FC<ProvidersProps> = ({ children }) => {
   return (
     <CountProvider>
-      {children}
+      <CountOptimizeProvider>
+        {children}
+      </CountOptimizeProvider>
     </CountProvider>
   );
 };
@@ -35,6 +39,7 @@ const App: FC = () => (
         <Route path="/use-callback" element={<UseCallback />} />
         <Route path="/custom-hook" element={<CustomHook />} />
         <Route path="/context" element={<Context />} />
+        <Route path="/context-optimize" element={<ContextOptimize />} />
       </Routes>
     </BrowserRouter>
   </Providers>
