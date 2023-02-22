@@ -22,7 +22,7 @@
 - `recoil` 状態管理ライブラリrecoilを利用したglobal stateの利用例
 - `recoil optimize` 状態管理ライブラリrecoilを利用したglobal stateのレンダリング最適化した例
 - `recoil custom hook` global stateのロジックをコンポーネントから分離し、テスト可能にした例
-
+- `recoil selector` recoil selectorを利用した計算値の取得と不要な再実行の抑制
 
 # 目的に応じた索引
 
@@ -40,6 +40,7 @@
   - useCallback
   - context optimize
   - recoil optimize
+  - recoil selector
 - ロジック分離とテスト
   - useReducer
   - custom hook
@@ -1327,3 +1328,153 @@ describe('useReset', () => {
 - ロジック(カスタムフック)はその処理単体をテスト
 - 注意: カプセル化のため通常atomで作ったstateはexportしない
   - initialValueを設定可能なテストの利便性とstateを別で利用される危険性は表裏一体なので要検討
+
+# recoil selector
+
+recoil selectorを利用した計算値の取得と不要な再実行の抑制
+
+/src/components/RecoilSelector.tsx
+
+```jsx
+import React from 'react';
+import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+
+const double = (value: number) => {
+  console.log('calculate double', value);
+
+  return value * 2;
+};
+
+const state1 = atom<number>({
+  key: 'recoil-selector-count1',
+  default: 0,
+});
+
+const doubleState1 = selector<number>({
+  key: 'recoil-selector-count-double1',
+  get: ({ get }) => {
+    const count = get(state1);
+    return double(count);
+  },
+});
+
+const useCounter1 = () => {
+  const [count, setCount] = useRecoilState(state1);
+  const doubleCount = useRecoilValue(doubleState1);
+
+  const increment = () => {
+    setCount((count) => count + 1);
+  };
+
+  return { count, doubleCount, increment };
+};
+
+const state2 = atom<number>({
+  key: 'recoil-selector-count2',
+  default: 0,
+});
+
+const useCounter2 = () => {
+  const [count, setCount] = useRecoilState(state2);
+
+  const increment = () => {
+    setCount((count) => count + 1);
+  };
+
+  const doubleCount = double(count);
+
+  return { count, doubleCount, increment };
+};
+
+
+const Count1Component: React.FC = () => {
+  const { count } = useCounter1();
+
+  return (
+    <Typography>Count1: {count}</Typography>
+  );
+};
+
+const DoubleCount1Component: React.FC = () => {
+  const { doubleCount } = useCounter1();
+
+  return (
+    <Typography>DoubleCount1: {doubleCount}</Typography>
+  );
+};
+
+const CountUp1Component: React.FC = () => {
+  const { increment } = useCounter1();
+
+  return (
+    <Button onClick={() => increment()}>+</Button>
+  );
+};
+
+const Count2Component: React.FC = () => {
+  const { count } = useCounter2();
+
+  return (
+    <Typography>Count2: {count}</Typography>
+  );
+};
+
+const DoubleCount2Component: React.FC = () => {
+  const { doubleCount } = useCounter2();
+
+  return (
+    <Typography>DoubleCount2: {doubleCount}</Typography>
+  );
+};
+
+const CountUp2Component: React.FC = () => {
+  const { increment } = useCounter2();
+
+  return (
+    <Button onClick={() => increment()}>+</Button>
+  );
+};
+
+const RecoilSelectorComponent: React.FC = () => {
+  return (
+    <Box>
+      <Count1Component />
+      <DoubleCount1Component />
+      <CountUp1Component />
+
+      <Count2Component />
+      <DoubleCount2Component />
+      <CountUp2Component />
+    </Box>
+  );
+};
+
+export default RecoilSelectorComponent;
+```
+
+/src/App.tsx
+
+```diff
++ import RecoilSelector from './components/RecoilSelector';
+
+const App: FC = () => (
+  <Providers>
+    <BrowserRouter>
+      <Routes>
+        ...
++       <Route path="/recoil-selector" element={<RecoilSelector />} />
+        ...
+      </Routes>
+    </BrowserRouter>
+  </Providers>
+);
+
+export default App;
+```
+
+- recoil selectorを利用した計算値の取得と不要な再実行の抑制
+- selectorを利用していない場合、フックを利用しているコンポーネント分再計算される
+- selectorを利用している場合、useRecoilValueに渡して取得できる計算値の定義ができ、そのselector内部で利用しているatomが変更されない限り再実行は抑制される
